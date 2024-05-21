@@ -16,6 +16,7 @@
 
 namespace WePayV3\Contracts;
 
+use WeChat\Contracts\DataArray;
 use WeChat\Contracts\Tools;
 use WeChat\Exceptions\InvalidArgumentException;
 use WeChat\Exceptions\InvalidDecryptException;
@@ -135,6 +136,18 @@ abstract class BasicWePay
 //        if (!empty($options['sub_mch_id'])) {
 //            $this->config['sub_mch_id'] = $options['sub_mch_id'];
 //        }
+    }
+
+    /**
+     * 获取配置项参数
+     * @param string|null $offset
+     * @return array|mixed|string|null
+     * @auther xhh
+     */
+    public function getConfig($offset = null)
+    {
+        $config = new DataArray($this->config);
+        return $config->get($offset);
     }
 
     /**
@@ -340,7 +353,7 @@ abstract class BasicWePay
      * @return string
      * @throws \WeChat\Exceptions\InvalidDecryptException
      */
-    protected function rsaEncode($string)
+    public function rsaEncode($string)
     {
         $publicKey = $this->config['mp_cert_content'];
         if (openssl_public_encrypt($string, $encrypted, $publicKey, OPENSSL_PKCS1_OAEP_PADDING)) {
