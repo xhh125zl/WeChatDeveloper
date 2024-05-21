@@ -1,7 +1,6 @@
 {
   "type": "library",
-  "name": "zoujingli/wechat-developer",
-  "homepage": "https://thinkadmin.top",
+  "name": "xhh125zl/wechat-developer",
   "description": "WeChat and Alipay Platform Development",
   "license": "MIT",
   "authors": [
@@ -9,6 +8,10 @@
       "name": "Anyon",
       "email": "zoujingli@qq.com",
       "homepage": "https://thinkadmin.top"
+    },
+    {
+      "name": "xhh125zl",
+      "email": "1042370690@qq.com"
     }
   ],
   "keywords": [
