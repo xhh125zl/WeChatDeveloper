@@ -1,11 +1,34 @@
 # WeChatDeveloper for PHP
 
-* 基于 [WeChatDeveloper](https://github.com/zoujingli/WeChatDeveloper) 优化并完善；
-* 添加并修改自用的内容，方便使用
-* 基础的使用文档请参考原始的WeChatDeveloper文档
+[![Latest Stable Version](https://poser.pugx.org/zoujingli/wechat-developer/v/stable)](https://packagist.org/packages/zoujingli/wechat-developer)
+[![Total Downloads](https://poser.pugx.org/zoujingli/wechat-developer/downloads)](https://packagist.org/packages/zoujingli/wechat-developer)
+[![Monthly Downloads](https://poser.pugx.org/zoujingli/wechat-developer/d/monthly)](https://packagist.org/packages/zoujingli/wechat-developer)
+[![Daily Downloads](https://poser.pugx.org/zoujingli/wechat-developer/d/daily)](https://packagist.org/packages/zoujingli/wechat-developer)
+[![PHP Version Require](http://poser.pugx.org/zoujingli/wechat-developer/require/php)](https://packagist.org/packages/wechat-developer)
+[![License](https://poser.pugx.org/zoujingli/wechat-developer/license)](https://packagist.org/packages/zoujingli/wechat-developer)
+
+* WeChatDeveloper 是基于 [wechat-php-sdk](https://github.com/zoujingli/wechat-php-sdk) 重构，优化并完善；
+* 运行最底要求 PHP 版本 5.4 , 建议在 PHP7 上运行以获取最佳性能；
+* 目前 WeChatDeveloper 针对 access_token 失效增加了自动刷新机制；
+* 微信的部分接口需要缓存数据在本地，因此配置目录并需要对目录有写权限；
+* 我们鼓励大家使用 composer 来管理您的第三方库，方便后期更新操作；
+* WeChatDeveloper 已历经数个线上项目考验，欢迎 fork 或 star 此项目。
+* 微信商户已经支持 v2 和 v3 接口，未加入的接口可以使用通用方式调用。
+
+功能描述
+----
+
+* 微信小程序，服务端接口支持
+* 微信认证服务号，服务端接口支持
+* 微信支付（账单、卡券、红包、退款、转账、App支付、JSAPI支付、Web支付、扫码支付等）
+* 支付宝支付（账单、转账、App支付、刷卡支付、扫码支付、Web支付、Wap支付等）
 
 技术帮助
 ----
+PHP开发技术交流（QQ群 513350915）
+
+[![PHP微信开发群 (SDK)](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=ae25cf789dafbef62e50a980ffc31242f150bc61a61164458216dd98c411832a)
+
 WeChatDeveloper 是基于官方接口封装，在做微信开发前，必需先阅读微信官方文档。
 
 * 微信官方文档：https://mp.weixin.qq.com/wiki
@@ -13,7 +36,15 @@ WeChatDeveloper 是基于官方接口封装，在做微信开发前，必需先�
 
 针对 WeChatDeveloper 也有一准备了帮助资料可供参考。
 
+* ThinkAdmin：https://github.com/zoujingli/ThinkAdmin
 * WeChatDeveloper：https://www.kancloud.cn/zoujingli/wechat-developer
+
+代码仓库
+----
+WeChatDeveloper 为开源项目，允许把它用于任何地方，不受任何约束，欢迎 fork 项目。
+
+* Gitee 托管地址：https://gitee.com/zoujingli/WeChatDeveloper
+* GitHub 托管地址：https://github.com/zoujingli/WeChatDeveloper
 
 文件说明（后续会根据官方文档增加文件）
 ----
@@ -64,13 +95,13 @@ WeChatDeveloper 是基于官方接口封装，在做微信开发前，必需先�
 
 ```shell
 # 首次安装 线上版本（稳定）
-composer require xhh125zl/wechat-developer
+composer require zoujingli/wechat-developer
 
 # 首次安装 开发版本（开发）
-composer require xhh125zl/wechat-developer dev-master
+composer require zoujingli/wechat-developer dev-master
 
 # 更新 WeChatDeveloper
-composer update xhh125zl/wechat-developer
+composer update zoujingli/wechat-developer
 ```
 
 1.2 如果不使用 Composer， 可以下载 WeChatDeveloper 并解压到项目中
@@ -259,3 +290,7 @@ try {
 本项目包含的第三方源码和二进制文件的版权信息将另行标注，请在对应文件查看。
 
 版权所有 Copyright © 2014-2023 by ThinkAdmin (https://thinkadmin.top) All rights reserved。
+
+## 赞助打赏，请作者喝杯茶 ~
+
+![赞助](https://doc.thinkadmin.top/static/img/pay.png)
