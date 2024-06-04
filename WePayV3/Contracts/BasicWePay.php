@@ -106,7 +106,35 @@ abstract class BasicWePay
         $this->config['cert_public'] = $options['cert_public'];
         $this->config['cert_private'] = $options['cert_private'];
         if (empty($options['cert_serial'])) {
-            $this->config['cert_serial'] = openssl_x509_parse($this->config['cert_public'], true)['serialNumberHex'];
+            // 参照：https://github.com/wechatpay-apiv3/wechatpay-guzzle-middleware/blob/master/src/Util/PemUtil.php#L89-L104
+            $info = openssl_x509_parse($this->config['cert_public'], true);
+            if (!isset($info['serialNumber']) && !isset($info['serialNumberHex'])) {
+                throw new InvalidArgumentException('证书格式错误');
+            }
+
+            $serialNo = '';
+            // PHP 7.0+ provides serialNumberHex field
+            if (isset($info['serialNumberHex'])) {
+                $serialNo = $info['serialNumberHex'];
+            } else {
+                // PHP use i2s_ASN1_INTEGER in openssl to convert serial number to string,
+                // i2s_ASN1_INTEGER may produce decimal or hexadecimal format,
+                // depending on the version of openssl and length of data.
+                if (\strtolower(\substr($info['serialNumber'], 0, 2)) == '0x') { // HEX format
+                    $serialNo = \substr($info['serialNumber'], 2);
+                } else { // DEC format
+                    $value = $info['serialNumber'];
+                    $hexvalues = ['0','1','2','3','4','5','6','7',
+                        '8','9','A','B','C','D','E','F'];
+                    while ($value != '0') {
+                        $serialNo = $hexvalues[\bcmod($value, '16')].$serialNo;
+                        $value = \bcdiv($value, '16', 0);
+                    }
+                }
+            }
+            $this->config['cert_serial'] = $serialNo;
+
+            // $this->config['cert_serial'] = openssl_x509_parse($this->config['cert_public'], true)['serialNumberHex'];
         } else {
             $this->config['cert_serial'] = $options['cert_serial'];
         }
