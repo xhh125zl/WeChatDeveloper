@@ -2,6 +2,7 @@
 
 namespace WePayV3;
 
+use WeChat\Contracts\Tools;
 use WePayV3\Contracts\BasicWePay;
 
 /**
@@ -52,28 +53,44 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询申请状态：通过业务申请编号查询申请状态
+     * 上传图片
      * @param string $file_url 图片本地全部路径，例如：\www\data\a.jpg
      * @param string $file_name 图片名称（包含后缀），例如：a.jpg
      * @return array
-     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
      * @document https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter2_1_1.shtml
      */
     public function uploadImage($file_url, $file_name = '')
     {
+        $path = "/v3/merchant/media/upload";
+
         // 没有定义图片名称的，则使用图片路径解析名称
         if (empty($file_name)) $file_name = basename($file_url);
 
-        $data = [
-            'file' => fread(fopen($file_url, 'rb'), filesize($file_url)),
-            'media' => [
-                'filename' => $file_name,
-                'sha256' => hash('sha256', file_get_contents($file_url)),
-            ]
-        ];
+        $meta['filename'] = $file_name; // 文件名称
+        $meta['sha256'] = hash_file('sha256', $file_url); // 文件生成哈希值
 
-        $path = "/v3/merchant/media/upload";
-        return $this->doRequest('POST', $path, json_encode($data, JSON_UNESCAPED_UNICODE), true);
+        $boundary = "abcdefg"; // 分割符号 （为商户自定义的一个字符串）
+        $customHeader = [
+            'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
+        ];
+        $header = $this->_getHeader('POST', $path, json_encode($meta, JSON_UNESCAPED_UNICODE), $customHeader);
+
+        $boundaryStr = "--{$boundary}\r\n";
+        $body = $boundaryStr;
+        $body .= 'Content-Disposition: form-data; name="meta"' . "\r\n";
+        $body .= 'Content-Type: application/json' . "\r\n";
+        $body .= "\r\n";
+        $body .= json_encode($meta, true) . "\r\n";
+        $body .= $boundaryStr;
+        $body .= 'Content-Disposition: form-data; name="file"; filename="' . $meta['filename'] . '"' . "\r\n";
+        $mime_type = mime_content_type($file_url); //获取图片MIME类型
+        $body .= 'Content-Type: ' . $mime_type . ';' . "\r\n";
+        $body .= "\r\n";
+        $body .= (fread(fopen($file_url, 'rb'), filesize($file_url))) . "\r\n";
+        $body .= "--{$boundary}--\r\n";
+        $content = Tools::post($this->base . $path, $body, ['headers' => $header]);
+        return json_decode($content, true);
     }
 
     // ----------------------------------------------------------------

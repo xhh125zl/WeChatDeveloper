@@ -204,22 +204,26 @@ abstract class BasicWePay
      */
     public function doRequest($method, $pathinfo, $jsondata = '', $verify = false, $isjson = true)
     {
-        list($time, $nonce) = [time(), uniqid() . rand(1000, 9999)];
-        $signstr = join("\n", [$method, $pathinfo, $time, $nonce, $jsondata, '']);
-
-        // 生成数据签名TOKEN
-        $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
-            $this->config['mch_id'], $nonce, $time, $this->config['cert_serial'], $this->signBuild($signstr)
-        );
+        // list($time, $nonce) = [time(), uniqid() . rand(1000, 9999)];
+        // $signstr = join("\n", [$method, $pathinfo, $time, $nonce, $jsondata, '']);
+        //
+        // // 生成数据签名TOKEN
+        // $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
+        //     $this->config['mch_id'], $nonce, $time, $this->config['cert_serial'], $this->signBuild($signstr)
+        // );
         $location = (preg_match('|^https?://|', $pathinfo) ? '' : $this->base) . $pathinfo;
+        // list($header, $content) = $this->_doRequestCurl($method, $location, [
+        //     'data' => $jsondata, 'header' => [
+        //         'Accept: application/json',
+        //         'Content-Type: application/json',
+        //         'User-Agent: https://thinkadmin.top',
+        //         "Authorization: WECHATPAY2-SHA256-RSA2048 {$token}",
+        //         "Wechatpay-Serial: {$this->config['mp_cert_serial']}"
+        //     ],
+        // ]);
+        $base_header = $this->_getHeader($method, $pathinfo, $jsondata);
         list($header, $content) = $this->_doRequestCurl($method, $location, [
-            'data' => $jsondata, 'header' => [
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'User-Agent: https://thinkadmin.top',
-                "Authorization: WECHATPAY2-SHA256-RSA2048 {$token}",
-                "Wechatpay-Serial: {$this->config['mp_cert_serial']}"
-            ],
+            'data' => $jsondata, 'header' => $base_header,
         ]);
 
         if ($verify) {
@@ -245,6 +249,41 @@ abstract class BasicWePay
         }
 
         return $isjson ? json_decode($content, true) : $content;
+    }
+
+    /**
+     * 获取header
+     * @param string $method 请求访问
+     * @param string $pathinfo 请求路由
+     * @param string $jsondata 请求数据
+     * @param array $customHeader 自定义header（可覆盖已有的header），例如：['Content-Type' => 'multipart/form-data']
+     * @return array
+     * @auther xhh
+     */
+    protected function _getHeader($method, $pathinfo, $jsondata = '', $customHeader = [])
+    {
+        list($time, $nonce) = [time(), uniqid() . rand(1000, 9999)];
+        $signstr = join("\n", [$method, $pathinfo, $time, $nonce, $jsondata, '']);
+
+        // 生成数据签名TOKEN
+        $token = sprintf('mchid="%s",nonce_str="%s",timestamp="%d",serial_no="%s",signature="%s"',
+            $this->config['mch_id'], $nonce, $time, $this->config['cert_serial'], $this->signBuild($signstr)
+        );
+
+        $header = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'User-Agent' => 'https://thinkadmin.top',
+            'Authorization' => 'WECHATPAY2-SHA256-RSA2048 ' . $token,
+            'Wechatpay-Serial' => $this->config['mp_cert_serial'],
+        ];
+        $header = array_merge($header, $customHeader);
+
+        $header_new = [];
+        foreach ($header as $name => $value) {
+            $header_new[] = $name . ': ' . $value;
+        }
+        return $header_new;
     }
 
     /**
