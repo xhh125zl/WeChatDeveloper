@@ -7,6 +7,7 @@ use WePayV3\Contracts\BasicWePay;
 
 /**
  * 平台收付通（商户进件）
+ * @document https://pay.weixin.qq.com/wiki/doc/apiv3_partner/open/pay/chapter3_3_0.shtml
  * Class Ecommerce
  * @package WePayV3
  * @auther xhh
