@@ -19,7 +19,7 @@ namespace WePayV3;
 use WePayV3\Contracts\BasicWePay;
 
 /**
- * 普通商户商家分账
+ * 普通商户 | 商家分账
  * Class Profitsharing
  * @package WePayV3
  */

@@ -152,18 +152,18 @@ abstract class BasicWePay
         }
 
         // 服务商参数支持
-//        if (!empty($options['sp_appid'])) {
-//            $this->config['sp_appid'] = $options['sp_appid'];
-//        }
-//        if (!empty($options['sp_mchid'])) {
-//            $this->config['sp_mchid'] = $options['sp_mchid'];
-//        }
-//        if (!empty($options['sub_appid'])) {
-//            $this->config['sub_appid'] = $options['sub_appid'];
-//        }
-//        if (!empty($options['sub_mch_id'])) {
-//            $this->config['sub_mch_id'] = $options['sub_mch_id'];
-//        }
+        if (!empty($options['sp_appid'])) {
+            $this->config['sp_appid'] = $options['sp_appid'];
+        }
+        if (!empty($options['sp_mchid'])) {
+            $this->config['sp_mchid'] = $options['sp_mchid'];
+        }
+        if (!empty($options['sub_appid'])) {
+            $this->config['sub_appid'] = $options['sub_appid'];
+        }
+        if (!empty($options['sub_mch_id'])) {
+            $this->config['sub_mch_id'] = $options['sub_mch_id'];
+        }
     }
 
     /**

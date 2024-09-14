@@ -92,10 +92,14 @@ use WeChat\Exceptions\InvalidInstanceException;
  *
  * ----- WePayV3 -----
  * @method \WePayV3\Cert WePayV3Cert($options = []) static 【v3】平台证书管理
- * @method \WePayV3\Ecommerce WePayV3Ecommerce($options = []) static 【v3】平台收付通（商户进件）
  * @method \WePayV3\Order WePayV3Order($options = []) static 【v3】直连商户 | 订单支付接口
  * @method \WePayV3\ProfitSharing WePayV3ProfitSharing($options = []) static 【v3】普通商户商家分账
  * @method \WePayV3\Transfers WePayV3Transfers($options = []) static 【v3】普通商户商家转账到零钱
+ * 
+ * @method \WePayV3\Ecommerce WePayV3Ecommerce($options = []) static 【v3】平台收付通（商户进件）
+ * @method \WePayV3\EcommerceOrder WePayV3EcommerceOrder($options = []) static 【v3】平台收付通订单支付
+ * @method \WePayV3\EcommerceCombineOrder WePayV3EcommerceCombineOrder($options = []) static 【v3】平台收付通合单支付
+ * @method \WePayV3\EcommerceProfitSharing WePayV3EcommerceProfitSharing($options = []) static 【v3】平台收付通订单分账
  * 
  */
 class We
@@ -104,7 +108,7 @@ class We
      * 定义当前版本
      * @var string
      */
-    const VERSION = '1.2.60.2';
+    const VERSION = '1.2.60.3';
 
     /**
      * 静态配置
