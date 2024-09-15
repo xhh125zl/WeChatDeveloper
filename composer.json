@@ -22,7 +22,7 @@
     "WeChatDeveloper"
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5",
     "ext-xml": "*",
     "ext-json": "*",
     "ext-curl": "*",
@@ -30,7 +30,8 @@
     "ext-libxml": "*",
     "ext-openssl": "*",
     "ext-mbstring": "*",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "ext-fileinfo": "*"
   },
   "autoload": {
     "files": [

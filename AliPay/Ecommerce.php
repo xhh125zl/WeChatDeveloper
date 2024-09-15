@@ -195,9 +195,26 @@ class Ecommerce extends BasicAliPay
      * @auther xhh
      * @date 2024-09-12 9:27
      */
-    public function imageUpload($options)
+    public function uploadImage($file_url, $file_name = '')
     {
+        $path_info = pathinfo($file_url);
+        $ext = strtolower($path_info['extension']);
+
+        // 没有定义图片名称的，则使用图片路径解析名称
+        if (empty($file_name)) $file_name = $path_info['basename'];
+
         $this->options->set('method', 'ant.merchant.expand.indirect.image.upload');
-        return $this->getResult($options);
+        // 不能放到biz_content中，否则签名不过
+        // 必须单独赋值，和放不放biz_content中没关系，否则签名不过
+        $this->options->set('image_type', $ext);
+
+        $file = curl_file_create($file_url, mime_content_type($file_url), $file_name);
+        $other_options = [
+            // 不参与签名数据
+            'data' => [
+                'image_content' => $file,
+            ],
+        ];
+        return $this->postResult([], $other_options);
     }
 }

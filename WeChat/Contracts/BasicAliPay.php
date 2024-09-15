@@ -125,6 +125,28 @@ abstract class BasicAliPay
     }
 
     /**
+     * 获取配置项参数
+     * @param string|null $offset
+     * @return array|mixed|string|null
+     * @auther xhh
+     */
+    public function getConfig($offset = null)
+    {
+        return $this->config->get($offset);
+    }
+
+    /**
+     * 获取请求参数
+     * @param string|null $offset
+     * @return array|mixed|string|null
+     * @auther xhh
+     */
+    public function getOptions($offset = null)
+    {
+        return $this->options->get($offset);
+    }
+
+    /**
      * 查询支付宝订单状态
      * @param string $outTradeNo
      * @return array|boolean
@@ -256,27 +278,61 @@ abstract class BasicAliPay
      * 数据包生成及数据签名
      * @param array $options
      */
-    protected function applyData($options)
+    protected function applyData($options = [])
     {
         if ($this->config->get('app_cert') && $this->config->get('root_cert')) {
             $this->setAppCertSnAndRootCertSn();
         }
-        $this->options->set('biz_content', json_encode($this->params->merge($options), 256));
+        $params = $this->params->merge($options);
+        // 防止为空时提示json错误
+        if (!empty($params)) $this->options->set('biz_content', json_encode($params, 256));
         $this->options->set('sign', $this->getSign());
     }
 
     /**
      * 请求接口并验证访问数据
      * @param array $options
+     * @param array $other_options
      * @return array|boolean
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    protected function getResult($options)
+    protected function getResult($options, $other_options = [])
     {
         $this->applyData($options);
         $method = str_replace('.', '_', $this->options['method']) . '_response';
-        $data = json_decode(Tools::get($this->gateway, $this->options->get()), true);
+        $data = json_decode(Tools::get($this->gateway, $this->options->get(), $other_options), true);
+        if (!isset($data[$method]['code']) || $data[$method]['code'] !== '10000') {
+            throw new InvalidResponseException(
+                "Error: " .
+                (empty($data[$method]['code']) ? '' : "{$data[$method]['msg']} [{$data[$method]['code']}]\r\n") .
+                (empty($data[$method]['sub_code']) ? '' : "{$data[$method]['sub_msg']} [{$data[$method]['sub_code']}]\r\n"),
+                $data[$method]['code'], $data
+            );
+        }
+        return $data[$method];
+        // 返回结果签名检查
+        // return $this->verify($data[$method], $data['sign']);
+    }
+
+    /**
+     * 请求接口并验证访问数据
+     * @param array $options
+     * @param array $other_options
+     * @return array|boolean
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     */
+    protected function postResult($options, $other_options = [])
+    {
+        $this->applyData($options);
+        $data = $this->options->get();
+        // 合并不参与签名的数据
+        $data = array_merge($data, !empty($other_options['data']) ? $other_options['data'] : []);
+        unset($other_options['data']);
+
+        $method = str_replace('.', '_', $this->options['method']) . '_response';
+        $data = json_decode(Tools::post($this->gateway, $data, $other_options), true);
         if (!isset($data[$method]['code']) || $data[$method]['code'] !== '10000') {
             throw new InvalidResponseException(
                 "Error: " .
