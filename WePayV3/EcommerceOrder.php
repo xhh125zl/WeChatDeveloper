@@ -56,4 +56,34 @@ class EcommerceOrder extends BasicOrder
         $path = "/v3/pay/partner/transactions/out-trade-no/{$tradeNo}/close";
         return $this->doRequest('POST', $path, json_encode($data, JSON_UNESCAPED_UNICODE), true);
     }
+    
+    /**
+     * 创建退款订单
+     * @param array $data 退款参数
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @document https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter7_6_1.shtml
+     */
+    public function createRefund($data)
+    {
+        $path = '/v3/ecommerce/refunds/apply';
+        return $this->doRequest('POST', $path, json_encode($data, JSON_UNESCAPED_UNICODE), true);
+    }
+
+    /**
+     * 退款订单查询
+     * @param string $refund_id 微信的退款单号
+     * @param string $refund_no 商户的退款单号
+     * @param string $sub_mchid 二级商户的商户号
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @document https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter7_6_2.shtml
+     */
+    public function queryRefund($refund_id, $refund_no, $sub_mchid = '')
+    {
+        if (!empty($refund_id)) $path = "/v3/ecommerce/refunds/id/{$refund_id}";
+        else $path = "/v3/ecommerce/refunds/out-refund-no/{$refund_no}";
+        $path .= '?sub_mchid=' . (!empty($sub_mchid) ? $sub_mchid : $this->config['sub_mch_id']);
+        return $this->doRequest('GET', $path, '', true);
+    }
 }
