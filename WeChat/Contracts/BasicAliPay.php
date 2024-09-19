@@ -175,6 +175,20 @@ abstract class BasicAliPay
     }
 
     /**
+     * 撤销支付宝进行中的订单
+     * @param array|string $options
+     * @return array|boolean
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     */
+    public function cancel($options)
+    {
+        if (!is_array($options)) $options = ['out_trade_no' => $options];
+        $this->options->set('method', 'alipay.trade.cancel');
+        return $this->getResult($options);
+    }
+
+    /**
      * 关闭支付宝进行中的订单
      * @param array|string $options
      * @return array|boolean
