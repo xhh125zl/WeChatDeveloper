@@ -14,37 +14,42 @@
 // | github 代码仓库：https://github.com/zoujingli/WeChatDeveloper
 // +----------------------------------------------------------------------
 
-namespace AliPay;
+namespace WeMini;
 
-use WeChat\Contracts\BasicAliPay;
+use WeChat\Contracts\BasicWeChat;
 
 /**
- * 支付宝刷卡支付
- * Class Pos
- * @package AliPay
+ * 微信小程序服务市场
+ * Class Ocr
+ * @package WeMini
  */
-class Pos extends BasicAliPay
+class Market extends BasicWeChat
 {
     /**
-     * Pos constructor.
-     * @param array $options
-     */
-    public function __construct(array $options)
-    {
-        parent::__construct($options);
-        $this->options->set('method', 'alipay.trade.pay');
-        $this->params->set('product_code', 'FACE_TO_FACE_PAYMENT');
-    }
-
-    /**
-     * 创建数据操作
-     * @param array $options
-     * @return array|bool
+     * 调用服务平台上架的API
+     * @param array $data
+     * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    public function apply($options)
+    public function invoke($data)
     {
-        return $this->getResult($options);
+        $url = 'https://api.weixin.qq.com/wxa/servicemarket?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
     }
+
+    /**
+     * 获取服务市场返回的数据
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     */
+    public function retrieve($data)
+    {
+        $url = 'https://api.weixin.qq.com/wxa/servicemarketretrieve?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
+
 }

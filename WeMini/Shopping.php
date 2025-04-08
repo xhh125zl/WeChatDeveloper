@@ -14,91 +14,82 @@
 // | github 代码仓库：https://github.com/zoujingli/WeChatDeveloper
 // +----------------------------------------------------------------------
 
-namespace WeChat;
+namespace WeMini;
 
 use WeChat\Contracts\BasicWeChat;
 
 /**
- * 微信菜单管理
- * Class Menu
- * @package WeChat
+ * 小程序购物订单
+ * Class Shopping
+ * @package WeMini
  */
-class Menu extends BasicWeChat
+class Shopping extends BasicWeChat
 {
 
     /**
-     * 自定义菜单查询接口
-     * @return array
-     * @throws \WeChat\Exceptions\InvalidResponseException
-     * @throws \WeChat\Exceptions\LocalCacheException
-     */
-    public function get()
-    {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
-        return $this->callGetApi($url);
-    }
-
-    /**
-     * 自定义菜单删除接口
-     * @return array
-     * @throws \WeChat\Exceptions\InvalidResponseException
-     * @throws \WeChat\Exceptions\LocalCacheException
-     */
-    public function delete()
-    {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
-        return $this->callGetApi($url);
-    }
-
-    /**
-     * 自定义菜单创建
+     * 上传购物详情
      * @param array $data
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    public function create(array $data)
+    public function uploadShoppingInfo($data)
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
-        return $this->callPostApi($url, $data);
+        $url = 'https://api.weixin.qq.com/user-order/orders?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
     }
 
     /**
-     * 创建个性化菜单
+     * 上传物流信息
      * @param array $data
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    public function addConditional(array $data)
+    public function uploadShippingInfo($data)
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=ACCESS_TOKEN";
-        return $this->callPostApi($url, $data);
+        $url = 'https://api.weixin.qq.com/user-order/orders?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
     }
 
     /**
-     * 删除个性化菜单
-     * @param string $menuid
+     * 上传合单购物详情
+     * @param array $data
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    public function delConditional($menuid)
+    public function uploadCombinedShoppingInfo($data)
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/delconditional?access_token=ACCESS_TOKEN";
-        return $this->callPostApi($url, ['menuid' => $menuid]);
+        $url = 'https://api.weixin.qq.com/user-order/orders?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
     }
 
     /**
-     * 测试个性化菜单匹配结果
-     * @param string $openid
+     * 上传合单物流信息
+     * @param array $data
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      * @throws \WeChat\Exceptions\LocalCacheException
      */
-    public function tryConditional($openid)
+    public function uploadCombinedShippingInfo($data)
     {
-        $url = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=ACCESS_TOKEN";
-        return $this->callPostApi($url, ['user_id' => $openid]);
+        $url = 'https://api.weixin.qq.com/user-order/orders?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
     }
+
+    /**
+     * 验证购物订单上传结果
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     */
+    public function ShoppingInfoVerifyUploadResult($data)
+    {
+        $url = 'https://api.weixin.qq.com/user-order/shoppinginfo/verify?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
+
 }
