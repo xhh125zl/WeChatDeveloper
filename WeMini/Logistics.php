@@ -233,5 +233,64 @@ class Logistics extends BasicWeChat
         return $this->callPostApi($url, $data, true);
     }
 
+    //---------------------------------------------------
+    // 消息组件
+
+    /**
+     * 传运单接口
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     * @author xhh
+     */
+    public function traceWaybill($data)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/trace_waybill?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
+    /**
+     * 查询运单接口
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     * @author xhh
+     */
+    public function traceWaybill($data)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/query_trace?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
+    /**
+     * 获取运力id列表
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     * @author xhh
+     */
+    public function traceWaybill($data)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/get_delivery_list?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
+    /**
+     * 更新物流信息接口
+     * @param array $data
+     * @return array
+     * @throws \WeChat\Exceptions\InvalidResponseException
+     * @throws \WeChat\Exceptions\LocalCacheException
+     * @author xhh
+     */
+    public function traceWaybill($data)
+    {
+        $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/update_waybill_goods?access_token=ACCESS_TOKEN';
+        return $this->callPostApi($url, $data, true);
+    }
+
 
 }
