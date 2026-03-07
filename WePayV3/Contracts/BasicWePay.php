@@ -338,11 +338,24 @@ abstract class BasicWePay
         }
         $signature = '';
         if (!openssl_sign($data, $signature, $pkeyid, 'sha256WithRSAEncryption')) {
-            openssl_free_key($pkeyid);
+            $this->freeKey($pkeyid);
             throw new InvalidArgumentException("Failed to sign data with private key");
         }
-        openssl_free_key($pkeyid);
+        $this->freeKey($pkeyid);
         return base64_encode($signature);
+    }
+
+    /**
+     * 兼容释放 OpenSSL 密钥资源
+     * @param mixed $pkey
+     * @return void
+     */
+    protected function freeKey($pkey)
+    {
+        // PHP 8+ 中 openssl_free_key 已废弃，交由运行时回收即可。
+        if (version_compare(PHP_VERSION, '8.0.0', '<') && function_exists('openssl_free_key')) {
+            openssl_free_key($pkey);
+        }
     }
 
     /**
