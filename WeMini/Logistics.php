@@ -244,7 +244,7 @@ class Logistics extends BasicWeChat
      * @throws \WeChat\Exceptions\LocalCacheException
      * @author xhh
      */
-    public function traceWaybill($data)
+    public function openMsgTraceWaybill($data)
     {
         $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/trace_waybill?access_token=ACCESS_TOKEN';
         return $this->callPostApi($url, $data, true);
@@ -258,7 +258,7 @@ class Logistics extends BasicWeChat
      * @throws \WeChat\Exceptions\LocalCacheException
      * @author xhh
      */
-    public function traceWaybill($data)
+    public function openMsgQueryTrace($data)
     {
         $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/query_trace?access_token=ACCESS_TOKEN';
         return $this->callPostApi($url, $data, true);
@@ -272,7 +272,7 @@ class Logistics extends BasicWeChat
      * @throws \WeChat\Exceptions\LocalCacheException
      * @author xhh
      */
-    public function traceWaybill($data)
+    public function openMsgGetDeliveryList($data)
     {
         $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/get_delivery_list?access_token=ACCESS_TOKEN';
         return $this->callPostApi($url, $data, true);
@@ -286,11 +286,9 @@ class Logistics extends BasicWeChat
      * @throws \WeChat\Exceptions\LocalCacheException
      * @author xhh
      */
-    public function traceWaybill($data)
+    public function openMsgUpdateWaybillGoods($data)
     {
         $url = 'https://api.weixin.qq.com/cgi-bin/express/delivery/open_msg/update_waybill_goods?access_token=ACCESS_TOKEN';
         return $this->callPostApi($url, $data, true);
     }
-
-
 }
