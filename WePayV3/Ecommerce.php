@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | WeChatDeveloper
 // +----------------------------------------------------------------------
-// | 版权所有 2014~2025 ThinkAdmin [ thinkadmin.top ]
+// | 版权所有 2014~2026 ThinkAdmin [ thinkadmin.top ]
 // +----------------------------------------------------------------------
 // | 官方网站: https://thinkadmin.top
 // +----------------------------------------------------------------------
@@ -19,8 +19,7 @@ use WeChat\Contracts\Tools;
 use WePayV3\Contracts\BasicWePay;
 
 /**
- * 平台收付通
- * @class Ecommerce
+ * 收付通（特约/二级商户、合单、分账等）
  * @package WePayV3
  */
 class Ecommerce extends BasicWePay
@@ -112,8 +111,8 @@ class Ecommerce extends BasicWePay
     //------------------------------------------------------------
 
     /**
-     * 提交申请单（商户进件）
-     * @param array $data 进件参数
+     * 提交进件申请
+     * @param array $data 进件参数（含证件、账户、联系人，敏感字段自动 RSA）
      * @return array
      * @throws \WeChat\Exceptions\InvalidDecryptException
      * @throws \WeChat\Exceptions\InvalidResponseException
@@ -149,7 +148,7 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 通过业务申请编号查询申请状态（商户进件）
+     * 按业务申请编号查询进件状态
      * @param string $out_request_no 业务申请编号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
@@ -161,7 +160,7 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 通过申请单ID查询申请状态（商户进件）
+     * 按申请单 ID 查询进件状态
      * @param string $applyment_id 微信支付申请单号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
@@ -173,9 +172,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 修改结算账户（商户进件）
-     * @param string $sub_mchid 特约商户/二级商户号
-     * @param array $data 包体参数
+     * 修改结算账户
+     * @param string $sub_mchid 特约/二级商户号
+     * @param array $data 账户参数（敏感字段需 RSA）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -186,8 +185,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询结算账户修改申请状态（商户进件）
-     * @param string $sub_mchid 特约商户/二级商户号
+     * 查询结算账户修改状态
+     * @param string $sub_mchid 特约/二级商户号
      * @param string $application_no 修改结算账户申请单号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
@@ -200,8 +199,8 @@ class Ecommerce extends BasicWePay
 
 
     /**
-     * 查询结算账户（商户进件）
-     * @param string $sub_mchid 特约商户/二级商户号
+     * 查询结算账户
+     * @param string $sub_mchid 特约/二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -212,8 +211,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 上传文件（商户进件）
-     * @param string $filename 文件目录
+     * 上传进件所需图片/文件
+     * @param string $filename 本地文件路径
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -223,8 +222,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * APP下单（普通支付）
-     * @param array $data POST请求参数
+     * 合作方 APP 下单
+     * @param array $data 下单参数（sp_mchid, sub_mchid, description, out_trade_no, notify_url 等）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -235,8 +234,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * JSAPI下单（普通支付）
-     * @param array $data POST请求参数
+     * 合作方 JSAPI 下单
+     * @param array $data 下单参数（含 payer.openid 等）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -247,8 +246,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * Native下单（普通支付）
-     * @param array $data POST请求参数
+     * 合作方 Native 下单
+     * @param array $data 下单参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -259,8 +258,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * H5下单（普通支付）
-     * @param array $data POST请求参数
+     * 合作方 H5 下单
+     * @param array $data 下单参数（含 scene_info 等）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -271,9 +270,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 微信支付订单号查询订单（普通支付）
-     * @param string $transaction_id
-     * @param string $sub_mchid
+     * 订单查询（按微信交易号）
+     * @param string $transaction_id 微信订单号
+     * @param string $sub_mchid 二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -285,9 +284,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 微信支付商户订单号查询订单（普通支付）
-     * @param string $out_trade_no
-     * @param string $sub_mchid
+     * 订单查询（按商户订单号）
+     * @param string $out_trade_no 商户订单号
+     * @param string $sub_mchid 二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -299,9 +298,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 关闭订单（普通支付）
+     * 关闭订单
      * @param string $out_trade_no 商户订单号
-     * @param array $data POST请求参数
+     * @param array $data 包含 sub_mchid 等
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -313,8 +312,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * JSAPI支付（合单下单）
-     * @param array $data POST请求参数
+     * 合单 JSAPI 下单
+     * @param array $data 合单参数（combine_out_trade_no, sub_orders 等）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -325,8 +324,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * APP支付（合单下单）
-     * @param array $data POST请求参数
+     * 合单 APP 下单
+     * @param array $data 合单参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -337,8 +336,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * H5支付（合单下单）
-     * @param array $data POST请求参数
+     * 合单 H5 下单
+     * @param array $data 合单参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -349,8 +348,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * Native支付（合单下单）
-     * @param array $data POST请求参数
+     * 合单 Native 下单
+     * @param array $data 合单参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -361,8 +360,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 合单查询（合单支付）
-     * @param string $combine_out_trade_no
+     * 合单查询
+     * @param string $combine_out_trade_no 合单商户订单号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -373,9 +372,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 合单关单（合单下单）
-     * @param $combine_out_trade_no
-     * @param array $data POST请求参数
+     * 合单关单
+     * @param string $combine_out_trade_no 合单商户订单号
+     * @param array $data 包含 sub_orders 等
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -386,8 +385,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 请求分账(分账)
-     * @param array $data POST请求参数
+     * 电商平台发起分账
+     * @param array $data 分账参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -398,8 +397,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询分账结果(分账)
-     * @param array $param
+     * 查询分账结果
+     * @param array $param 查询参数（sub_mchid, transaction_id, out_order_no 等）
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -410,8 +409,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 请求分账回退(分账)
-     * @param array $data POST请求参数
+     * 请求分账回退
+     * @param array $data 回退参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -422,8 +421,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询分账回退结果(分账)
-     * @param array $param
+     * 查询分账回退结果
+     * @param array $param 查询参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -434,8 +433,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 完结分账(分账)
-     * @param array $data POST请求参数
+     * 完结分账
+     * @param array $data 完结参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -446,7 +445,7 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询订单剩余待分金额(分账)
+     * 查询订单待分金额
      * @param string $transaction_id 微信订单号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
@@ -458,8 +457,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 添加分账接收方(分账)
-     * @param array $data POST请求参数
+     * 添加分账接收方
+     * @param array $data 接收方参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -470,8 +469,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 添加分账接收方(分账)
-     * @param array $data POST请求参数
+     * 删除分账接收方
+     * @param array $data 接收方参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -482,8 +481,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 请求补差(补差)
-     * @param array $data POST请求参数
+     * 请求补差
+     * @param array $data 补差参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -494,8 +493,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 请求补差回退(补差)
-     * @param array $data POST请求参数
+     * 补差回退
+     * @param array $data 回退参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -506,8 +505,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 取消补差(补差)
-     * @param array $data POST请求参数
+     * 取消补差
+     * @param array $data 取消参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -518,8 +517,8 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 申请退款(退款)
-     * @param array $data POST请求参数
+     * 申请退款
+     * @param array $data 退款参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -530,9 +529,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询单笔退款（按商户退款单号）(退款)
-     * @param string $refund_id
-     * @param string $sub_mchid
+     * 查询单笔退款（按微信退款号）
+     * @param string $refund_id 微信退款号
+     * @param string $sub_mchid 二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -543,9 +542,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询单笔退款（按商户退款单号）(退款)
-     * @param string $out_refund_no
-     * @param string $sub_mchid
+     * 查询单笔退款（按商户退款号）
+     * @param string $out_refund_no 商户退款单号
+     * @param string $sub_mchid 二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -556,9 +555,9 @@ class Ecommerce extends BasicWePay
     }
 
     /**
-     * 查询垫付回补结果(退款)
-     * @param string $refund_id
-     * @param string $sub_mchid
+     * 查询垫付回补结果
+     * @param string $refund_id 微信退款号
+     * @param string $sub_mchid 二级商户号
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
@@ -570,8 +569,8 @@ class Ecommerce extends BasicWePay
 
     /**
      * 垫付退款回补
-     * @param string $refund_id
-     * @param array $data
+     * @param string $refund_id 微信退款号
+     * @param array $data 回补参数
      * @return array
      * @throws \WeChat\Exceptions\InvalidResponseException
      */
